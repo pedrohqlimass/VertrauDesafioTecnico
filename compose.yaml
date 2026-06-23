@@ -1,0 +1,7 @@
+﻿services:
+  vertraudesafiotecnico:
+    image: vertraudesafiotecnico
+    build:
+      context: .
+      dockerfile: VertrauDesafioTecnico/Dockerfile
+

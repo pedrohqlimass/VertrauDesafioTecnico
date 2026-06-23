@@ -1,0 +1,21 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VertrauDesafioTecnico", "VertrauDesafioTecnico\VertrauDesafioTecnico.csproj", "{F90FF1C6-3DF1-4377-8F65-5D283B50F22F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{4AC4F00F-E6A7-4B95-92E3-172F45775424}"
+	ProjectSection(SolutionItems) = preProject
+		compose.yaml = compose.yaml
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F90FF1C6-3DF1-4377-8F65-5D283B50F22F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F90FF1C6-3DF1-4377-8F65-5D283B50F22F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F90FF1C6-3DF1-4377-8F65-5D283B50F22F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F90FF1C6-3DF1-4377-8F65-5D283B50F22F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
