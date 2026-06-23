@@ -10,5 +10,5 @@ public class AppDbContext : DbContext
     {
     }
 
-    public DbSet<User> Users { get; set; }
+    public DbSet<UserModel> Users { get; set; }
 }
