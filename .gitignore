@@ -1,4 +1,5 @@
 .idea/
+appsettings.Development.json
 bin/
 obj/
 /packages/
