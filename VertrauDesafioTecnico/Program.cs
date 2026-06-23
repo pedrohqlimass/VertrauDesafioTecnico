@@ -1,11 +1,15 @@
 using Microsoft.EntityFrameworkCore;
 using VertrauDesafioTecnico.DB;
+using VertrauDesafioTecnico.Service;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // DB
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+// Services
+builder.Services.AddScoped<UserService>();
 
 // Controllers
 builder.Services.AddControllers();
