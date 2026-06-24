@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using VertrauDesafioTecnico.DB;
-using VertrauDesafioTecnico.Entity;
+using VertrauDesafioTecnico.Model;
 
 namespace VertrauDesafioTecnico.Service;
 

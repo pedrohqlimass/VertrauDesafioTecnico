@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace VertrauDesafioTecnico.Entity;
+namespace VertrauDesafioTecnico.Model;
 
 public class UserModel
 {

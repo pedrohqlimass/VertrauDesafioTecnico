@@ -1,4 +1,4 @@
-﻿using VertrauDesafioTecnico.Entity;
+﻿using VertrauDesafioTecnico.Model;
 
 namespace VertrauDesafioTecnico.Service;
 

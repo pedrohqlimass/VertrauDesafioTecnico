@@ -1,4 +1,4 @@
-﻿namespace VertrauDesafioTecnico.Entity;
+﻿namespace VertrauDesafioTecnico.Model;
 
 public enum Genero
 {

@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using VertrauDesafioTecnico.Entity;
+using VertrauDesafioTecnico.Model;
 
 namespace VertrauDesafioTecnico.DB;
 
