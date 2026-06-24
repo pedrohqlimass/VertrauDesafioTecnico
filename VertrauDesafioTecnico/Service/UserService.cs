@@ -1,5 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using VertrauDesafioTecnico.DB;
+using VertrauDesafioTecnico.DTOs;
+using VertrauDesafioTecnico.Mappers;
 using VertrauDesafioTecnico.Model;
 
 namespace VertrauDesafioTecnico.Service;
@@ -13,64 +15,66 @@ public class UserService
         _context = context;
     }
 
-    public async Task<IEnumerable<UserModel>> GetAllAsync()
+    public async Task<IEnumerable<UserResponseDto>> GetAllAsync()
     {
-        return await _context.Users.ToListAsync();
+        var users = await _context.Users.ToListAsync();
+        
+        return users.Select(UserMapper.ToDto);
     }
 
-    public async Task<UserModel?> GetByIdAsync(long id)
+    public async Task<UserResponseDto?> GetByIdAsync(long id)
     {
-        return await _context.Users.FindAsync(id);
+        var user = await _context.Users.FindAsync(id);
+        
+        if (user is null)
+            return null;
+        
+        return UserMapper.ToDto(user);
     }
 
-    public async Task<UserModel> CreateAsync(UserModel userModel)
+    public async Task<UserResponseDto> CreateAsync(UserCreateDto createDto)
     {
-        if (userModel.DataNascimento.HasValue)
-        {
-            if (userModel.DataNascimento.Value > DateTime.UtcNow)
-                throw new ArgumentException("Data de nascimento não pode ser maior que a data atual.");
-            
-            userModel.DataNascimento = DateTime.SpecifyKind(userModel.DataNascimento.Value, DateTimeKind.Utc);
-           
-        }
+        if (createDto.DataNascimento.HasValue && createDto.DataNascimento.Value > DateTime.UtcNow)
+            throw new ArgumentException("Data inválida");
+        
+        var user = UserMapper.ToEntity(createDto);
 
-        _context.Users.Add(userModel);
+        _context.Users.Add(user);
         await _context.SaveChangesAsync();
-        return userModel;
+        
+        return UserMapper.ToDto(user);
     }
 
-    public async Task<UserModel?> UpdateAsync(long id, UserModel userModel)
+    public async Task<UserResponseDto?> UpdateAsync(long id, UserCreateDto createDto)
     {
+        var user = await _context.Users.FindAsync(id);
         
-        if (userModel.DataNascimento.HasValue)
-        {
-            if (userModel.DataNascimento.Value > DateTime.UtcNow)
-                throw new ArgumentException("Data de nascimento não pode ser maior que a data atual.");
-            
-            userModel.DataNascimento = DateTime.SpecifyKind(userModel.DataNascimento.Value, DateTimeKind.Utc);
-           
-        }
+        if (user is null)
+            return null;
         
-        var existe = await _context.Users.FindAsync(id);
-        if (existe is null) return null;
+        if (createDto.DataNascimento.HasValue && createDto.DataNascimento.Value > DateTime.UtcNow)
+            throw new ArgumentException("Data inválida");
         
-        existe.Nome = userModel.Nome;
-        existe.Sobrenome = userModel.Sobrenome;
-        existe.Email = userModel.Email;
-        existe.Genero = userModel.Genero;
-        existe.DataNascimento = userModel.DataNascimento;
+        user.Nome = createDto.Nome;
+        user.Sobrenome = createDto.Sobrenome;
+        user.Email = createDto.Email;
+        user.Genero = createDto.Genero;
+        user.DataNascimento = createDto.DataNascimento;
         
         await _context.SaveChangesAsync();
-        return existe;
+        
+        return UserMapper.ToDto(user);
     }
 
     public async Task<bool> DeleteAsync(long id)
     {
         var existe = await _context.Users.FindAsync(id);
-        if(existe is null) return false;
+        if(existe is null) 
+            return false;
         
         _context.Users.Remove(existe);
         await _context.SaveChangesAsync();
+        
         return true;
     }
 }

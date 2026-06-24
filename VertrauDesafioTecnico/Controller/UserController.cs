@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using VertrauDesafioTecnico.DTOs;
+using VertrauDesafioTecnico.Mappers;
 using VertrauDesafioTecnico.Model;
 using VertrauDesafioTecnico.Service;
 
@@ -15,12 +17,16 @@ public class UserController : ControllerBase
     }
 
     [HttpPost("register")]
-    public async Task<IActionResult> CreateUser([FromBody] UserModel user)
+    public async Task<IActionResult> CreateUser([FromBody] UserCreateDto createDto)
     {
         try
         {
-            var novoUser = await _userService.CreateAsync(user);
-            return StatusCode(201, $"Usuário com o id: {novoUser.Id} foi registrado com sucesso");
+            var response = await _userService.CreateAsync(createDto);
+
+            return CreatedAtAction(
+                nameof(GetUserInfoById),
+                new { id = response.Id },
+                response);
         }
         catch (ArgumentException ex)
         {
@@ -32,7 +38,10 @@ public class UserController : ControllerBase
     public async Task<IActionResult> GetUserInfo()
     {
         var users = await _userService.GetAllAsync();
-        if (!users.Any()) return NoContent();
+        
+        if (!users.Any())
+            return NoContent();
+        
         return Ok(users);
     }
 
@@ -40,18 +49,24 @@ public class UserController : ControllerBase
     public async Task<IActionResult> GetUserInfoById(long id)
     {
         var user = await _userService.GetByIdAsync(id);
-        if (user != null) return Ok(user);
-        return NotFound($"Usuário com o id: {id} não existe em nosso sistema");
+        
+        if (user is null) 
+            return NotFound($"Usuário com o id: {{id}} não existe em nosso sistema");
+        
+        return Ok(user);
     }
 
     [HttpPut("updateuserinfo/{id}")]
-    public async Task<IActionResult> UpdateUserInfo(long id, [FromBody] UserModel userAtualizado)
+    public async Task<IActionResult> UpdateUserInfo(long id, [FromBody] UserCreateDto createDto)
     {
         try
         {
-            var user = await _userService.UpdateAsync(id, userAtualizado);
-            if (user != null) return Ok($"Usuário com o id: {id} foi atualizado com sucesso");
-            return NotFound($"Usuário com o id: {id} não existe em nosso sistema");
+            var user = await _userService.UpdateAsync(id, createDto);
+            
+            if (user is null) 
+                return NotFound($"Usuário com o id: {id} foi atualizado com sucesso");
+            
+            return Ok(user);
         }
         catch (ArgumentException ex)
         {
@@ -63,7 +78,9 @@ public class UserController : ControllerBase
     public async Task<IActionResult> DeleteUserInfo(long id)
     {
         var deletado = await _userService.DeleteAsync(id);
-        if (deletado) return Ok($"Usuário com o id: {id} foi deletado com sucesso.");
-        return NotFound($"Usuário com o id: {id} não existe em nosso sistema");
+        
+        if (!deletado) 
+            return NotFound($"Usuário com o id: {id} não existe em nosso sistema");
+        return Ok($"Usuário com o id: {id} foi deletado com sucesso.");
     }
 }
