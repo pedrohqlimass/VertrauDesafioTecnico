@@ -25,6 +25,15 @@ public class UserService
 
     public async Task<UserModel> CreateAsync(UserModel userModel)
     {
+        if (userModel.DataNascimento.HasValue)
+        {
+            if (userModel.DataNascimento.Value > DateTime.UtcNow)
+                throw new ArgumentException("Data de nascimento não pode ser maior que a data atual.");
+            
+            userModel.DataNascimento = DateTime.SpecifyKind(userModel.DataNascimento.Value, DateTimeKind.Utc);
+           
+        }
+
         _context.Users.Add(userModel);
         await _context.SaveChangesAsync();
         return userModel;
@@ -32,6 +41,16 @@ public class UserService
 
     public async Task<UserModel?> UpdateAsync(long id, UserModel userModel)
     {
+        
+        if (userModel.DataNascimento.HasValue)
+        {
+            if (userModel.DataNascimento.Value > DateTime.UtcNow)
+                throw new ArgumentException("Data de nascimento não pode ser maior que a data atual.");
+            
+            userModel.DataNascimento = DateTime.SpecifyKind(userModel.DataNascimento.Value, DateTimeKind.Utc);
+           
+        }
+        
         var existe = await _context.Users.FindAsync(id);
         if (existe is null) return null;
         

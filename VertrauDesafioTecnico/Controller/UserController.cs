@@ -17,8 +17,15 @@ public class UserController : ControllerBase
     [HttpPost("register")]
     public async Task<IActionResult> CreateUser([FromBody] UserModel user)
     {
-        var novoUser = await _userService.CreateAsync(user);
-        return StatusCode(201, $"Usuário com o id: {novoUser.Id} foi registrado com sucesso");
+        try
+        {
+            var novoUser = await _userService.CreateAsync(user);
+            return StatusCode(201, $"Usuário com o id: {novoUser.Id} foi registrado com sucesso");
+        }
+        catch (ArgumentException ex)
+        {
+            return BadRequest(ex.Message);
+        }
     }
 
     [HttpGet("getuserinfo")]
@@ -40,10 +47,16 @@ public class UserController : ControllerBase
     [HttpPut("updateuserinfo/{id}")]
     public async Task<IActionResult> UpdateUserInfo(long id, [FromBody] UserModel userAtualizado)
     {
-        var user = await _userService.UpdateAsync(id, userAtualizado);
-        if (user != null) return Ok($"Usuário com o id: {id} foi atualizado com sucesso");
-        return NotFound($"Usuário com o id: {id} não existe em nosso sistema");
-
+        try
+        {
+            var user = await _userService.UpdateAsync(id, userAtualizado);
+            if (user != null) return Ok($"Usuário com o id: {id} foi atualizado com sucesso");
+            return NotFound($"Usuário com o id: {id} não existe em nosso sistema");
+        }
+        catch (ArgumentException ex)
+        {
+            return BadRequest(ex.Message);
+        }
     }
 
     [HttpDelete("deleteuserinfo/{id}")]
