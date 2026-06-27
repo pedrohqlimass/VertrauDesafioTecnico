@@ -4,7 +4,7 @@ using VertrauDesafioTecnico.Service;
 
 namespace VertrauDesafioTecnico.Controller;
 [ApiController]
-[Route("api/user")]
+[Route("usuarios")]
 public class UserController : ControllerBase
 {
     private readonly UserService _userService;
@@ -17,7 +17,7 @@ public class UserController : ControllerBase
         _logger = logger;
     }
 
-    [HttpPost("register")]
+    [HttpPost()]
     public async Task<IActionResult> CreateUser([FromBody] UserCreateDto createDto)
     {
         _logger.LogInformation("Iniciando criação de usuário. Email: {Email}", createDto.Email);
@@ -41,7 +41,7 @@ public class UserController : ControllerBase
         }
     }
 
-    [HttpGet("getuserinfo")]
+    [HttpGet()]
     public async Task<IActionResult> GetUserInfo()
     {
         _logger.LogInformation("Buscando todos os usuários");
@@ -58,7 +58,7 @@ public class UserController : ControllerBase
         return Ok(users);
     }
 
-    [HttpGet("getuserinfo/{id}")]
+    [HttpGet("{id}")]
     public async Task<IActionResult> GetUserInfoById(long id)
     {
         _logger.LogInformation("Buscando usuário pelo id: {Id}", id);
@@ -76,7 +76,7 @@ public class UserController : ControllerBase
         return Ok(user);
     }
 
-    [HttpPut("updateuserinfo/{id}")]
+    [HttpPut("{id}")]
     public async Task<IActionResult> UpdateUserInfo(long id, [FromBody] UserCreateDto createDto)
     {
         _logger.LogInformation("Atualizando usuário. Id: {Id}", id);
@@ -104,7 +104,7 @@ public class UserController : ControllerBase
         }
     }
 
-    [HttpDelete("deleteuserinfo/{id}")]
+    [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteUserInfo(long id)
     {
         _logger.LogInformation("Iniciando deleção de usuário. Id: {Id}", id);
